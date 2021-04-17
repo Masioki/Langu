@@ -68,6 +68,7 @@ fastlane/readme.md
 
 *.iml
 .gradle
+.idea/
 .idea
 /local.properties
 /.idea/caches
@@ -82,3 +83,4 @@ fastlane/readme.md
 .externalNativeBuild
 .cxx
 local.properties
+.idea/compiler.xml
