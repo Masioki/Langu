@@ -1,7 +1,7 @@
 package pwr.mobilne.langu
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import pwr.mobilne.langu.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
