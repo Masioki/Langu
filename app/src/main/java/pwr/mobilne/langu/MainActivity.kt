@@ -1,5 +1,6 @@
 package pwr.mobilne.langu
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import pwr.mobilne.langu.databinding.ActivityMainBinding
@@ -12,6 +13,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        binding.button.setOnClickListener{
+            startActivity(Intent(this, WordSearchActivity::class.java))
+        }
     }
+
 }
