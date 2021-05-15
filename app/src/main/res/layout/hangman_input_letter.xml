@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@drawable/hangman_latter_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:layout_margin="3dp"
+        android:gravity="center_horizontal">
+
+    <TextView
+            android:text="?"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hangmanLetter"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"/>
+</LinearLayout>

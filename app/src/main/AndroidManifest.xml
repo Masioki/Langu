@@ -10,6 +10,9 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Langu">
         <activity
+                android:name=".activities.game.hangman.HangmanActivity"
+                android:exported="true" />
+        <activity
                 android:name=".MainActivity"
                 android:exported="true">
             <intent-filter>
