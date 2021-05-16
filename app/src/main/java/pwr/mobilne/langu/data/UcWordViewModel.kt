@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UcWord(application: Application): AndroidViewModel(application) {
+public class WordViewModel(application: Application): AndroidViewModel(application) {
 
     val readAllData: LiveData<List<WordEntity>>
     private val repository: WordRepository
