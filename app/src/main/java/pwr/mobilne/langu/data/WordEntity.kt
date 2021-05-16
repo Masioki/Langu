@@ -14,7 +14,5 @@ data class WordEntity(
 
     val laguage: Int,
 
-    var category: Int
-
-
+    var category: String
 )

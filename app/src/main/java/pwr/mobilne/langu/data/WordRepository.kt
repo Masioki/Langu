@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 
 class WordRepository (private val taskDao: WordDao){
     val readAllData: LiveData<List<WordEntity>> = taskDao.readAllData()
+    val getAllCategories: LiveData<List<String>> = taskDao.getAllCategories()
 
     suspend fun addWord(user: WordEntity){
         taskDao.addWord(user)
