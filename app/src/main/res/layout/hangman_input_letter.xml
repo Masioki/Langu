@@ -3,12 +3,12 @@
         android:background="@drawable/hangman_latter_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="6dp"
+        android:padding="8dp"
         android:layout_margin="3dp"
         android:gravity="center_horizontal">
 
     <TextView
-            android:text="?"
+            android:text=" "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/hangmanLetter"

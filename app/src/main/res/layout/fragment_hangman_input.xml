@@ -4,6 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="fill_vertical"
         android:orientation="vertical"
         tools:context=".activities.game.hangman.HangmanInputFragment">
 
@@ -14,9 +15,10 @@
             android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_gravity="center_horizontal"
-            app:alignContent="center"
-            app:justifyContent="space_evenly"
-            android:layout_height="wrap_content">
+
+            app:justifyContent="center"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
 
     </com.google.android.flexbox.FlexboxLayout>
 
@@ -27,9 +29,11 @@
             android:animateLayoutChanges="true"
             android:layout_gravity="center_horizontal"
             app:alignContent="center"
-            app:justifyContent="space_evenly"
+            app:justifyContent="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_weight="1">
 
     </com.google.android.flexbox.FlexboxLayout>
 </LinearLayout>

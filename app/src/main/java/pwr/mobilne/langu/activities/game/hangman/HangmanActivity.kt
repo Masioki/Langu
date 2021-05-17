@@ -22,8 +22,14 @@ class HangmanActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) {
             word = savedInstanceState.getSerializable("word") as WordEntity
-            status = supportFragmentManager.getFragment(savedInstanceState, "status") as HangmanStatusFragment
-            input = supportFragmentManager.getFragment(savedInstanceState, "input") as HangmanInputFragment
+            status = supportFragmentManager.getFragment(
+                savedInstanceState,
+                "status"
+            ) as HangmanStatusFragment
+            input = supportFragmentManager.getFragment(
+                savedInstanceState,
+                "input"
+            ) as HangmanInputFragment
         } else {
             word = intent.getSerializableExtra("word") as WordEntity
             status = HangmanStatusFragment()

@@ -38,12 +38,14 @@ class HangmanInputFragment() : Fragment() {
             val key = layoutInflater.inflate(R.layout.hangman_input_key, keyboardLayout, false)
             key.setOnClickListener {
                 play(letter)
-                key.setBackgroundColor(resources.getColor(R.color.purple_700))
+                key.background = resources.getDrawable(R.drawable.hangman_key_background_inactive)
             }
+            key.findViewById<TextView>(R.id.hangmanKey).text = letter.toString()
             keyboardLayout.addView(key)
         }
         for (i in 1..word.german.length) {
-            val container = layoutInflater.inflate(R.layout.hangman_input_letter, lettersLayout, false)
+            val container =
+                layoutInflater.inflate(R.layout.hangman_input_letter, lettersLayout, false)
             lettersLayout.addView(container)
             letterContainers.add(container)
         }
@@ -56,7 +58,8 @@ class HangmanInputFragment() : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable("word", word)
-
+        outState.putSerializable("containers", letterContainers.toTypedArray())
+        outState.putSerializable("guessed", guessedLetters.toTypedArray())
     }
 
     private fun indexOf(letter: Char): Int {
@@ -66,11 +69,18 @@ class HangmanInputFragment() : Fragment() {
     }
 
     private fun update() {
-        for (l in guessedLetters) {
-            val index = indexOf(l)
-            if (index >= 0)
-                letterContainers[index].findViewById<TextView>(R.id.hangmanLetter).text = l.toString()
+        for (i in word.german.toCharArray().indices) {
+            if (guessedLetters.contains(word.german.uppercase()[i])) {
+                letterContainers[i].findViewById<TextView>(R.id.hangmanLetter).text =
+                    word.german.uppercase()[i].toString()
+            }
         }
+//        for (l in guessedLetters) {
+//            val index = indexOf(l)
+//            if (index >= 0)
+//                letterContainers[index].findViewById<TextView>(R.id.hangmanLetter).text =
+//                    l.toString()
+//        }
     }
 
     private fun play(letter: Char) {
