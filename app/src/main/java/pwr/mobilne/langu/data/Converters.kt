@@ -1,11 +1,12 @@
 package pwr.mobilne.langu.data
 
 import androidx.room.TypeConverter
+import java.util.*
 
 class Converters {
-   /* @TypeConverter
-    fun toCategory(value: Int) = enumValues<nt>()[value]
+    @TypeConverter
+    fun toLaguage(value: String) = Locale(value);
 
     @TypeConverter
-    fun fromCategory(value: Category) = value.ordinal*/
+    fun fromLaguage(value: Locale) = value.toString()
 }

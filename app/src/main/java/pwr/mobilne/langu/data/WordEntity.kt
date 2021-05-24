@@ -12,7 +12,8 @@ data class WordEntity(
 
     val nativs: String,
 
-    val laguage: Int,
+    //@TypeConverters(Converters::class)
+    val laguage: String,
 
     var category: String
 )
