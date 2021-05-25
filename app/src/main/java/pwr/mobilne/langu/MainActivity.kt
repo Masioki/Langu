@@ -2,38 +2,45 @@ package pwr.mobilne.langu
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ListAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.InvalidationTracker
+import org.jetbrains.annotations.Nullable
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
+import androidx.lifecycle.Observer
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var viewModel: WordViewModel
+    private lateinit var wordsLista:  MutableList<WordEntity>
     private lateinit var uvm: WordViewModel
 
-    companion object {
-        val lang: Locale = Locale.GERMANY
-    }
+    /**
+     * onCreate - przy tworzeniu
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         uvm = ViewModelProvider(this).get(WordViewModel::class.java)
+        wordsLista = listOf(WordEntity(0,"a1a","13", Locale.ENGLISH,"arh")) as MutableList<WordEntity>
+
         val view = binding.root
         setContentView(view)
-        var germanWord = WordEntity(11,"aa","12",Locale.GERMAN.toString(),"arh")
-        uvm.addWord(germanWord)
-        Log.e("FDSA1",Locale.GERMANY.country.toString())
-        if(Locale.GERMAN == Locale(Locale.GERMAN.toString())) {
-            Log.e("AS", Locale(Locale.GERMANY.toString()).toString())
-            Log.e("FDSA","abba")
-        }
-        print("ASDFGH")
-        print(uvm.getAllCategories)
-        Log.e("FDSeS",Locale.GERMANY.toString())
-        Log.e("FDSA","ASDFGH")
+
+        /**
+         * Selectowanie z bazy danych
+         */
+        uvm.readAllData.observe(this, Observer { status ->
+            this.wordsLista= status as MutableList<WordEntity>
+        })
+
+        /**
+         * PRZYKŁAD DODAWANIA DO BAZY DANYCH
+         */
+        uvm.addWord(WordEntity(0,"aa","12", Locale.GERMAN,"arh"))
     }
 }

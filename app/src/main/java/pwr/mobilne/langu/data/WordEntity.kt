@@ -2,6 +2,7 @@ package pwr.mobilne.langu.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import java.util.*
 
 @Entity(tableName = "words")
 data class WordEntity(
@@ -12,8 +13,8 @@ data class WordEntity(
 
     val nativs: String,
 
-    //@TypeConverters(Converters::class)
-    val laguage: String,
+    @TypeConverters(Converters::class)
+    val laguage: Locale,
 
     var category: String
 )
