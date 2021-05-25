@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.google.android.flexbox.FlexboxLayout
 import pwr.mobilne.langu.R
@@ -38,7 +39,8 @@ class HangmanInputFragment() : Fragment() {
             val key = layoutInflater.inflate(R.layout.hangman_input_key, keyboardLayout, false)
             key.setOnClickListener {
                 play(letter)
-                key.background = resources.getDrawable(R.drawable.hangman_key_background_inactive)
+                key.setBackgroundResource(R.drawable.hangman_key_background_inactive)
+               // key.background = resources.getDrawable(R.drawable.hangman_key_background_inactive)
             }
             key.findViewById<TextView>(R.id.hangmanKey).text = letter.toString()
             keyboardLayout.addView(key)

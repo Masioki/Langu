@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="fill_vertical"
+        android:layout_gravity="bottom"
         android:orientation="vertical"
         tools:context=".activities.game.hangman.HangmanInputFragment">
 
@@ -14,11 +14,11 @@
             app:flexWrap="wrap"
             android:animateLayoutChanges="true"
             android:layout_width="match_parent"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
 
             app:justifyContent="center"
             android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:layout_weight="1">
 
     </com.google.android.flexbox.FlexboxLayout>
 
@@ -27,7 +27,7 @@
             android:id="@+id/keyboardLayout"
             app:flexWrap="wrap"
             android:animateLayoutChanges="true"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
             app:alignContent="center"
             app:justifyContent="center"
             android:layout_width="match_parent"
