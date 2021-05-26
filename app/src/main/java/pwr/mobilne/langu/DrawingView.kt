@@ -6,8 +6,7 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
-class DrawingView(context: Context)  :
-    SurfaceView(context), SurfaceHolder.Callback {
+class DrawingView(context: Context)  : SurfaceView(context), SurfaceHolder.Callback {
     // absolute screen coords
     private var xStart = 0f
     private var yStart = 0f
@@ -22,7 +21,7 @@ class DrawingView(context: Context)  :
     private lateinit var parentActivity: WordSearchActivity
     private var isDrawing = false
 
-    override fun surfaceCreated(holder: SurfaceHolder?) {
+    override fun surfaceCreated(holder: SurfaceHolder) {
         paint = Paint().apply {
             color = Color.argb(255, 66, 135, 245)
             strokeWidth = 20f
@@ -30,10 +29,10 @@ class DrawingView(context: Context)  :
 
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
     }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
     }
 
     init {
