@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -36,7 +37,8 @@ class WordSearchActivity : AppCompatActivity() {
         foundWords = mutableListOf()
 
 
-        wordList = intent.getStringArrayListExtra("wordlist")!!.filter { it.length <= SIZE }.toTypedArray()
+        wordList =
+            intent.getStringArrayListExtra("wordlist")!!.filter { it.length <= SIZE }.toTypedArray()
         wordsPlaced = createWordSearch(wordList, SIZE) // get indices of successfully placed words
         addRandomLetters()
         printGrid()
@@ -116,8 +118,12 @@ class WordSearchActivity : AppCompatActivity() {
             val word = wordList[w]
             val str = SpannableString(word)
 
+            val typedValue: TypedValue = TypedValue()
+            theme.resolveAttribute(R.attr.colorHighlight, typedValue, true)
+
+
             val color = if (foundWords.contains(word))
-                Color.rgb(52, 235, 73)
+                typedValue.data
             else
                 Color.rgb(255, 255, 255)
             str.setSpan(ForegroundColorSpan(color), 0, str.length, 0)
@@ -129,23 +135,25 @@ class WordSearchActivity : AppCompatActivity() {
     }
 
     private fun markFoundWord(row: Int, col: Int, word: String, direction: Int) {
+        val typedValue: TypedValue = TypedValue()
+        theme.resolveAttribute(R.attr.colorHighlight, typedValue, true)
         when (direction) {
             0 -> {  // left to right
                 for (i in word.indices) {
                     val textViewCell = getTableLayoutCell(tableLayout, row, col + i) as TextView
-                    textViewCell.setTextColor(Color.rgb(52, 235, 73))
+                    textViewCell.setTextColor(typedValue.data)
                 }
             }
             1 -> {  // top down
                 for (i in word.indices) {
                     val textViewCell = getTableLayoutCell(tableLayout, row + i, col) as TextView
-                    textViewCell.setTextColor(Color.rgb(52, 235, 73))
+                    textViewCell.setTextColor(typedValue.data)
                 }
             }
             2 -> {  // diagonally down
                 for (i in word.indices) {
                     val textViewCell = getTableLayoutCell(tableLayout, row + i, col + i) as TextView
-                    textViewCell.setTextColor(Color.rgb(52, 235, 73))
+                    textViewCell.setTextColor(typedValue.data)
                 }
             }
         }
@@ -245,7 +253,7 @@ class WordSearchActivity : AppCompatActivity() {
             var attempts = 20
 
             val direction = (0..2).random()
-            loop@ while (attempts --> 0) {  // cool 'approaching zero' operator
+            loop@ while (attempts-- > 0) {  // cool 'approaching zero' operator
                 when (direction) { // random direction
                     0 -> {  // left to right
                         val row = (0 until size).random()
