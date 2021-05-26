@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         uvm = ViewModelProvider(this).get(WordViewModel::class.java)
         val view = binding.root
         setContentView(view)
+
         binding.button.setOnClickListener{  // TODO pass String array to this activity with key "wordlist"
             val int = Intent(this, WordSearchActivity::class.java)
             int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
