@@ -3,9 +3,10 @@ package pwr.mobilne.langu.activities.game.hangman
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.google.android.flexbox.FlexboxLayout
 import pwr.mobilne.langu.R
@@ -16,6 +17,7 @@ import java.util.stream.Collectors
 class HangmanInputFragment() : Fragment() {
     private lateinit var keyboardLayout: FlexboxLayout
     private lateinit var lettersLayout: FlexboxLayout
+    private lateinit var description: TextView
     private lateinit var word: WordEntity
     private val guessedLetters: MutableList<Char> = mutableListOf()
     private val letterContainers: MutableList<View> = mutableListOf()
@@ -34,13 +36,14 @@ class HangmanInputFragment() : Fragment() {
         super.onCreate(savedInstanceState)
         keyboardLayout = view.findViewById(R.id.keyboardLayout)
         lettersLayout = view.findViewById(R.id.wordLayout)
+        description = view.findViewById(R.id.wordDescription)
 
         for (letter in letters) {
             val key = layoutInflater.inflate(R.layout.hangman_input_key, keyboardLayout, false)
             key.setOnClickListener {
                 play(letter)
                 key.setBackgroundResource(R.drawable.hangman_key_background_inactive)
-               // key.background = resources.getDrawable(R.drawable.hangman_key_background_inactive)
+                // key.background = resources.getDrawable(R.drawable.hangman_key_background_inactive)
             }
             key.findViewById<TextView>(R.id.hangmanKey).text = letter.toString()
             keyboardLayout.addView(key)
@@ -55,6 +58,8 @@ class HangmanInputFragment() : Fragment() {
         if (savedInstanceState != null) {
             word = savedInstanceState.getSerializable("word") as WordEntity
         }
+        description.visibility= INVISIBLE
+        description.text = word.nativs
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -77,26 +82,29 @@ class HangmanInputFragment() : Fragment() {
                     word.german.uppercase()[i].toString()
             }
         }
-//        for (l in guessedLetters) {
-//            val index = indexOf(l)
-//            if (index >= 0)
-//                letterContainers[index].findViewById<TextView>(R.id.hangmanLetter).text =
-//                    l.toString()
-//        }
     }
 
     private fun play(letter: Char) {
-        guessedLetters.add(letter)
-        if (guessedLetters.containsAll(
-                word.german.toCharArray().toList().stream()
-                    .map { i -> i.uppercaseChar() }
-                    .collect(Collectors.toList()))
-        ) {
-            (activity as HangmanActivity).win()
-        } else if (indexOf(letter) < 0) {
-            (activity as HangmanActivity).missed()
+        if (!guessedLetters.contains(letter)) {
+            guessedLetters.add(letter)
+            if (guessedLetters.containsAll(
+                    word.german.toCharArray().toList().stream()
+                        .map { i -> i.uppercaseChar() }
+                        .collect(Collectors.toList()))
+            ) {
+                description.visibility = VISIBLE
+                description.alpha = 0F
+                description.animate()
+                    .setDuration(1500)
+                    .translationY(-description.height.toFloat())
+                    .alpha(1.0F)
+                    .setListener(null);
+                (activity as HangmanActivity).win()
+            } else if (indexOf(letter) < 0) {
+                (activity as HangmanActivity).missed()
+            }
+            update()
         }
-        update()
     }
 
 }
