@@ -46,6 +46,11 @@ class HangmanActivity : AppCompatActivity() {
         supportFragmentManager.putFragment(outState, "input", input)
     }
 
+    fun start(){
+        input.reset()
+        status.reset()
+    }
+
     fun win() {
         Toast.makeText(this, "win", LENGTH_LONG).show()
     }

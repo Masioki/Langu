@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.flexbox.FlexboxLayout
@@ -19,6 +20,7 @@ class HangmanInputFragment() : Fragment() {
     private lateinit var lettersLayout: FlexboxLayout
     private lateinit var description: TextView
     private lateinit var word: WordEntity
+    private lateinit var endLayout: LinearLayout
     private val guessedLetters: MutableList<Char> = mutableListOf()
     private val letterContainers: MutableList<View> = mutableListOf()
     private val letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()
@@ -37,6 +39,14 @@ class HangmanInputFragment() : Fragment() {
         keyboardLayout = view.findViewById(R.id.keyboardLayout)
         lettersLayout = view.findViewById(R.id.wordLayout)
         description = view.findViewById(R.id.wordDescription)
+        endLayout = view.findViewById(R.id.endLayout)
+        view.findViewById<TextView>(R.id.againButton).setOnClickListener {
+            (activity as HangmanActivity).start()
+        }
+
+        if (savedInstanceState != null) {
+            word = savedInstanceState.getSerializable("word") as WordEntity
+        }
 
         for (letter in letters) {
             val key = layoutInflater.inflate(R.layout.hangman_input_key, keyboardLayout, false)
@@ -48,18 +58,7 @@ class HangmanInputFragment() : Fragment() {
             key.findViewById<TextView>(R.id.hangmanKey).text = letter.toString()
             keyboardLayout.addView(key)
         }
-        for (i in 1..word.german.length) {
-            val container =
-                layoutInflater.inflate(R.layout.hangman_input_letter, lettersLayout, false)
-            lettersLayout.addView(container)
-            letterContainers.add(container)
-        }
-
-        if (savedInstanceState != null) {
-            word = savedInstanceState.getSerializable("word") as WordEntity
-        }
-        description.visibility= INVISIBLE
-        description.text = word.nativs
+        reset()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -67,6 +66,19 @@ class HangmanInputFragment() : Fragment() {
         outState.putSerializable("word", word)
         outState.putSerializable("containers", letterContainers.toTypedArray())
         outState.putSerializable("guessed", guessedLetters.toTypedArray())
+    }
+
+    fun reset() {
+        lettersLayout.removeAllViews()
+        for (i in 1..word.german.length) {
+            val container =
+                layoutInflater.inflate(R.layout.hangman_input_letter, lettersLayout, false)
+            lettersLayout.addView(container)
+            letterContainers.add(container)
+        }
+
+        endLayout.visibility = INVISIBLE
+        description.text = word.nativs
     }
 
     private fun indexOf(letter: Char): Int {
@@ -92,11 +104,11 @@ class HangmanInputFragment() : Fragment() {
                         .map { i -> i.uppercaseChar() }
                         .collect(Collectors.toList()))
             ) {
-                description.visibility = VISIBLE
-                description.alpha = 0F
-                description.animate()
+                endLayout.visibility = VISIBLE
+                endLayout.alpha = 0F
+                endLayout.animate()
                     .setDuration(1500)
-                    .translationY(-description.height.toFloat())
+                    .translationY(-endLayout.height.toFloat())
                     .alpha(1.0F)
                     .setListener(null);
                 (activity as HangmanActivity).win()
