@@ -12,4 +12,12 @@
     <color name="orange_dark">#CC5500</color>
     <color name="red">#FF0000</color>
     <color name="red_light">#FFCCCB</color>
+
+
+    <color name="theme_pink">#F5B7C9</color>
+    <color name="theme_pink_light">#F7C8D6</color>
+    <color name="theme_red">#CC2344</color>
+    <color name="theme_red_light">#E1516D</color>
+    <color name="theme_purple">#851759</color>
+    <color name="theme_purple_light">#D0248B</color>
 </resources>
