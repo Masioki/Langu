@@ -8,10 +8,12 @@ import android.view.SurfaceView
 
 class DrawingView(context: Context)  :
     SurfaceView(context), SurfaceHolder.Callback {
+    // absolute screen coords
     private var xStart = 0f
     private var yStart = 0f
     private var xEnd = 0f
     private var yEnd = 0f
+    // relative surface view coords
     private var xStartDraw = 0f
     private var yStartDraw = 0f
     private var xEndDraw = 0f
@@ -29,11 +31,9 @@ class DrawingView(context: Context)  :
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-        //TODO("Not yet implemented")
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        //TODO("Not yet implemented")
     }
 
     init {

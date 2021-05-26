@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -35,15 +34,9 @@ class WordSearchActivity : AppCompatActivity() {
         wordsTextView = findViewById(R.id.word_list)
         buildGrid()
         foundWords = mutableListOf()
-        val list = mutableListOf<String>()  // for the presentation sake, to be removed
-        val stubArray = resources.getStringArray(R.array.words_dictionary)
-        for (i in 0..10) {
-            list.add(stubArray.random())
-        }
-        wordList = list.toSet().toTypedArray()
 
-        //wordList = intent.getStringArrayListExtra("wordList")
-        wordList.filter { it.length <= SIZE }
+
+        wordList = intent.getStringArrayListExtra("wordlist")!!.filter { it.length <= SIZE }.toTypedArray()
         wordsPlaced = createWordSearch(wordList, SIZE) // get indices of successfully placed words
         addRandomLetters()
         printGrid()

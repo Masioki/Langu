@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        binding.button.setOnClickListener{
+        binding.button.setOnClickListener{  // TODO pass String array to this activity with key "wordlist"
             startActivity(Intent(this, WordSearchActivity::class.java))
         }
     }
