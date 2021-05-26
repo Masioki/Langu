@@ -20,7 +20,9 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         binding.button.setOnClickListener{  // TODO pass String array to this activity with key "wordlist"
-            startActivity(Intent(this, WordSearchActivity::class.java))
+            val int = Intent(this, WordSearchActivity::class.java)
+            int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
+            startActivity(int)
         }
 
         var germanWord = WordEntity(10,"aa","aaa",1,1)
