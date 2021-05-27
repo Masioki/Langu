@@ -10,6 +10,7 @@ import androidx.room.TypeConverters
 @TypeConverters(Converters::class)
 abstract class WordDatabase: RoomDatabase() {
 
+
     abstract fun userDao(): WordDao
 
     //singleton tu robie
@@ -17,12 +18,12 @@ abstract class WordDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: WordDatabase? = null
 
-        fun getDatabase(context: Context): WordDatabase{
+        fun getDatabase(context: Context): WordDatabase {
             val tempInstance = INSTANCE
-            if(tempInstance != null){
+            if (tempInstance != null) {
                 return tempInstance
             }
-            synchronized(this){
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     WordDatabase::class.java,

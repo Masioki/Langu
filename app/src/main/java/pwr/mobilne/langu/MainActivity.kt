@@ -41,8 +41,11 @@ class MainActivity : AppCompatActivity() {
          * PRZYKŁAD DODAWANIA DO BAZY DANYCH
          */
         uvm.addWord(WordEntity(0,"aa","12", Locale.GERMAN,"arh"))
+
         binding.button.setOnClickListener{  // TODO pass String array to this activity with key "wordlist"
-            startActivity(Intent(this, WordSearchActivity::class.java))
+            val int = Intent(this, WordSearchActivity::class.java)
+            int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
+            startActivity(int)
         }
     }
 }

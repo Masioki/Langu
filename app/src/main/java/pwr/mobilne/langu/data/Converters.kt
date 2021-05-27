@@ -9,4 +9,5 @@ class Converters {
 
     @TypeConverter
     fun fromLaguage(value: Locale) = value.toString()
+
 }
