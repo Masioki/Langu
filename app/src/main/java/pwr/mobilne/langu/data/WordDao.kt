@@ -1,17 +1,22 @@
 package pwr.mobilne.langu.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-interface WordDao{
+interface WordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addWord(word: WordEntity)
 
     @Delete
     suspend fun deleteWord(word: WordEntity)
 
-    @Query( "SELECT * FROM words ORDER BY id ASC")
+    @Query("SELECT * FROM words ORDER BY id ASC")
     fun readAllData(): LiveData<List<WordEntity>>
 
     @Update

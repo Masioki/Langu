@@ -1,7 +1,8 @@
 package pwr.mobilne.langu.data
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import java.io.Serializable
 
 @Entity(tableName = "words")
 data class WordEntity(
@@ -17,4 +18,4 @@ data class WordEntity(
     var category: Int
 
 
-)
+) : Serializable

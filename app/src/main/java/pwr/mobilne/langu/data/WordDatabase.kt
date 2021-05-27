@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [WordEntity::class], version = 1, exportSchema = false)
-abstract class WordDatabase: RoomDatabase() {
+abstract class WordDatabase : RoomDatabase() {
 
     abstract fun userDao(): WordDao
 
@@ -15,12 +15,12 @@ abstract class WordDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: WordDatabase? = null
 
-        fun getDatabase(context: Context): WordDatabase{
+        fun getDatabase(context: Context): WordDatabase {
             val tempInstance = INSTANCE
-            if(tempInstance != null){
+            if (tempInstance != null) {
                 return tempInstance
             }
-            synchronized(this){
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     WordDatabase::class.java,
