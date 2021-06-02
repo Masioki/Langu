@@ -20,7 +20,5 @@ data class WordEntity(
     val laguage: Locale,
 
     var category: String
-)
-
 ) : Serializable
 
