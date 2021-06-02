@@ -1,9 +1,11 @@
 package pwr.mobilne.langu
 
 import android.app.AlertDialog
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -27,6 +29,7 @@ class WordSearchActivity : AppCompatActivity() {
     private lateinit var wordsTextView: TextView
     private lateinit var wordList: Array<String>
     private lateinit var foundWords: MutableList<String>
+    private lateinit var foundCoords: MutableList<IntArray>
     private lateinit var wordsPlaced: List<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +38,7 @@ class WordSearchActivity : AppCompatActivity() {
         wordsTextView = findViewById(R.id.word_list)
         buildGrid()
         foundWords = mutableListOf()
-
-
+        foundCoords = mutableListOf()
         wordList =
             intent.getStringArrayListExtra("wordlist")!!.filter { it.length <= SIZE }.toTypedArray()
         wordsPlaced = createWordSearch(wordList, SIZE) // get indices of successfully placed words
@@ -45,9 +47,45 @@ class WordSearchActivity : AppCompatActivity() {
         printWords(wordList, wordsPlaced)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable("lettersGrid", lettersGrid)
+        outState.putSerializable("detectionGrid", detectionGrid)
+        outState.putSerializable("foundWords", foundWords.toTypedArray())
+        outState.putSerializable("foundCoords", foundCoords.toTypedArray())
+        outState.putSerializable("wordsPlaced", wordsPlaced.toTypedArray())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        // get arrays from bundle and cast them properly
+        var tmplist = savedInstanceState.getSerializable("lettersGrid") as Array<*>
+        lettersGrid = tmplist.filterIsInstance<Array<String?>>().takeIf { it.size == tmplist.size }!!.toTypedArray()
+
+        tmplist = savedInstanceState.getSerializable("detectionGrid") as Array<*>
+        detectionGrid = tmplist.filterIsInstance<Array<Int?>>().takeIf { it.size == tmplist.size }!!.toTypedArray()
+
+        tmplist = savedInstanceState.getSerializable("foundWords") as Array<*>
+        foundWords = tmplist.filterIsInstance<String>().takeIf { it.size == tmplist.size }!!.toMutableList()
+
+        tmplist = savedInstanceState.getSerializable("wordsPlaced") as Array<*>
+        wordsPlaced = tmplist.filterIsInstance<Int>().takeIf { it.size == tmplist.size }!!
+
+        tmplist = savedInstanceState.getSerializable("foundCoords") as Array<*>
+        foundCoords = tmplist.filterIsInstance<IntArray>().takeIf { it.size == tmplist.size }!!.toMutableList()
+
+        // restore colors
+        for(e in foundCoords) {
+            markFoundWord(e[0], e[1], e[2], e[3])
+        }
+        printGrid()
+        setWordListText()
+    }
+
 
     private fun inViewInBounds(view: View, x: Int, y: Int): Boolean {
-        val outRect: Rect = Rect()
+        val outRect = Rect()
         val location = IntArray(2)
 
         view.getDrawingRect(outRect)
@@ -85,18 +123,22 @@ class WordSearchActivity : AppCompatActivity() {
         }
         if (startIndex == endIndex && startIndex != null && start != end) {
             val word = wordList[startIndex]
-            foundWords.add(word)
-            val direction: Int = if (startingPos[0] == endingPos[0]) // same row
-                0
-            else if (startingPos[1] == endingPos[1])  // same col
-                1
-            else  // diagonally
-                2
-            markFoundWord(startingPos[0], startingPos[1], word, direction = direction)
-            println("You found word : $word!")
-            setWordListText()
-            if (wordList.size == foundWords.size) {
-                endDialog()
+            if (word !in foundWords) {
+                foundWords.add(word)
+
+                val direction: Int = if (startingPos[0] == endingPos[0]) // same row
+                    0
+                else if (startingPos[1] == endingPos[1])  // same col
+                    1
+                else  // diagonally
+                    2
+                foundCoords.add(intArrayOf(startingPos[0], startingPos[1], word.length, direction))
+                markFoundWord(startingPos[0], startingPos[1], word.length, direction = direction)
+                println("You found word : $word!")
+                setWordListText()
+                if (wordList.size == foundWords.size) {
+                    endDialog()
+                }
             }
         }
     }
@@ -134,24 +176,24 @@ class WordSearchActivity : AppCompatActivity() {
         wordsTextView.setText(bobTheBuilder, TextView.BufferType.SPANNABLE)
     }
 
-    private fun markFoundWord(row: Int, col: Int, word: String, direction: Int) {
+    private fun markFoundWord(row: Int, col: Int, length: Int, direction: Int) {
         val typedValue: TypedValue = TypedValue()
         theme.resolveAttribute(R.attr.colorHighlight, typedValue, true)
         when (direction) {
             0 -> {  // left to right
-                for (i in word.indices) {
+                for (i in 0 until length) {
                     val textViewCell = getTableLayoutCell(tableLayout, row, col + i) as TextView
                     textViewCell.setTextColor(typedValue.data)
                 }
             }
             1 -> {  // top down
-                for (i in word.indices) {
+                for (i in 0 until length) {
                     val textViewCell = getTableLayoutCell(tableLayout, row + i, col) as TextView
                     textViewCell.setTextColor(typedValue.data)
                 }
             }
             2 -> {  // diagonally down
-                for (i in word.indices) {
+                for (i in 0 until length) {
                     val textViewCell = getTableLayoutCell(tableLayout, row + i, col + i) as TextView
                     textViewCell.setTextColor(typedValue.data)
                 }
@@ -160,6 +202,9 @@ class WordSearchActivity : AppCompatActivity() {
     }
 
     private fun buildGrid() {
+        val orientation = resources.configuration.orientation
+        val portrait = orientation == Configuration.ORIENTATION_PORTRAIT
+        val margin = if (portrait) 2 else 0
         val tableParams = TableLayout.LayoutParams(
             TableLayout.LayoutParams.MATCH_PARENT,
             TableLayout.LayoutParams.MATCH_PARENT
@@ -168,13 +213,13 @@ class WordSearchActivity : AppCompatActivity() {
             TableRow.LayoutParams.MATCH_PARENT,
             TableRow.LayoutParams.MATCH_PARENT
         ).apply {
-            setMargins(0, 2, 0, 2)
+            setMargins(0, margin, 0, margin)
         }
 
         tableLayout = TableLayout(this).apply {
             layoutParams = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
             )
             isStretchAllColumns = true
         }
@@ -186,7 +231,7 @@ class WordSearchActivity : AppCompatActivity() {
                 val textView = TextView(this).apply {
                     layoutParams = rowParams // TableRow is the parent view
                     gravity = Gravity.CENTER_HORIZONTAL
-                    textSize = 25F
+                    textSize = if (portrait) 25F else 17F
                 }
                 tableRow.addView(textView)
             }
@@ -197,14 +242,13 @@ class WordSearchActivity : AppCompatActivity() {
 
         surfaceView = DrawingView(this).apply {
             layoutParams = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
             )
         }
         surfaceView.setParent(this)
         relativeLayout.addView(surfaceView)
     }
-
 
     private fun printGrid() {
         for (i in 0 until SIZE) {
