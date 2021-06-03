@@ -1,12 +1,16 @@
 package pwr.mobilne.langu
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import pwr.mobilne.langu.data.WordEntity
 
 
 class AddFlashcard : AppCompatActivity() {
@@ -21,6 +25,14 @@ class AddFlashcard : AppCompatActivity() {
         flashcardDescription = findViewById(R.id.edit_flashcard_description)
         flashcardName= findViewById(R.id.edit_flashcard_name)
         flashcardNotes = findViewById(R.id.edit_flashcard_notes)
+       /* TODO: val categories = intent.getIntExtra("categories")
+         radioGroup.add(categories)
+        for(category in categories){
+            val rb = RadioButton(this)
+            rb.text = category
+            rb.id = View.generateViewId()
+            radioGroup.addView(rb)
+        }*/
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
             createFlashcard()
@@ -52,13 +64,20 @@ class AddFlashcard : AppCompatActivity() {
     }
 
     private fun appendToVocabulary(){
-        //TODO: implement adding to db
+        val myIntent = Intent()
+        Log.println(Log.ERROR, "am", "Out")
+        myIntent.putExtra("native", flashcardDescription.text)
+        myIntent.putExtra("german", flashcardName.text)
+        myIntent.putExtra("category", findViewById<RadioButton>(radioGroup.checkedRadioButtonId).text)
+        setResult(Activity.RESULT_OK, myIntent)
+        finish()
     }
+
 
     private fun checkFilled() : Boolean {
         var errors = ""
         if(radioGroup.checkedRadioButtonId  == -1){
-            errors += "Please, check appropriate part of speech. "
+            errors += "Please, check appropriate category. "
         }
         if(flashcardName.text.isEmpty()){
             errors += "Please, input flashcard name. "
@@ -68,7 +87,6 @@ class AddFlashcard : AppCompatActivity() {
         }
         if(errors.equals("")){
             return true
-
         }
         else{
             Toast.makeText(

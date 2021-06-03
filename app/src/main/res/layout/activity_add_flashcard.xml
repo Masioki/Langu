@@ -7,12 +7,74 @@
     tools:context=".AddFlashcard">
 
     <EditText
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="14"
+        android:hint="Input new category"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.49" />
+
+    <TextView
+        android:id="@+id/category_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="14"
+        android:textSize="17sp"
+        android:hint="Or check from existing"
+        app:layout_constraintBottom_toTopOf="@id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/category"
+        app:layout_constraintVertical_bias="1.0" />
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:id="@+id/radioGroup"
+        android:checkedButton="@+id/radioNoun"
+        app:layout_constraintBottom_toTopOf="@+id/edit_flashcard_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Kitchen"
+            android:id="@+id/radioNoun"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="18sp" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Activity verbs"
+            android:id="@+id/radioVerb"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="18sp"
+            android:layout_weight="0.13" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Jobs"
+            android:id="@+id/radioOther"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="18sp"
+            android:layout_weight="0.13" />
+    </RadioGroup>
+
+    <EditText
         android:id="@+id/edit_flashcard_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="14"
-        android:inputType="textPersonName"
         android:hint="Flashcard"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,43 +93,6 @@
         app:layout_constraintTop_toBottomOf="@id/edit_flashcard_name"
         app:layout_constraintVertical_bias="0.0" />
 
-    <RadioGroup
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:weightSum="1"
-        android:id="@+id/radioGroup"
-        android:checkedButton="@+id/radioNoun"
-        app:layout_constraintBottom_toTopOf="@+id/edit_flashcard_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Noun"
-            android:id="@+id/radioNoun"
-            android:layout_gravity="center_horizontal"
-            android:checked="false"
-            android:textSize="18sp" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Verb"
-            android:id="@+id/radioVerb"
-            android:layout_gravity="center_horizontal"
-            android:checked="false"
-            android:textSize="18sp"
-            android:layout_weight="0.13" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Other"
-            android:id="@+id/radioOther"
-            android:layout_gravity="center_horizontal"
-            android:checked="false"
-            android:textSize="18sp"
-            android:layout_weight="0.13" />
-    </RadioGroup>
     <EditText
         android:id="@+id/edit_flashcard_notes"
         android:layout_width="wrap_content"

@@ -33,9 +33,38 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // TODO: pass distinct categories as String Array as StringExtra
     fun addFlashcard(view: View){
         val intent = Intent(this, AddFlashcard::class.java).apply {
         }
+        /* TODO:
+                val categories : Array<String> = uvm.getCategories()
+                intent.putExtra("categories", categories)
+         */
         startActivityForResult(intent, 111)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
+        if(resultCode == 111) {
+            super.onActivityResult(requestCode, resultCode, intentData)
+            val category = intentData?.getStringExtra("category")
+            val german = intentData?.getStringExtra("german")
+            val native = intentData?.getStringExtra("native")
+            if(german != null && native != null && category != null) {
+                /* TODO:
+                        val categories : Array<String> = uvm.getCategories()
+                        if(category in categories){
+                            val catId = uvm.getCategoryId(category)
+                        }
+                        else{
+                            uvm.insertCategory(category);
+                        }
+                 */
+                 val catId = 0
+
+                val word: WordEntity = WordEntity(0, german, native, 1, catId)
+                uvm.addWord(word)
+            }
+        }
     }
 }
