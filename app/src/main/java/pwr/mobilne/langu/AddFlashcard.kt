@@ -4,13 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import pwr.mobilne.langu.data.WordEntity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
+import java.security.AccessController.getContext
 
 
 class AddFlashcard : AppCompatActivity() {
@@ -18,6 +23,8 @@ class AddFlashcard : AppCompatActivity() {
     lateinit var flashcardDescription : EditText
     lateinit var flashcardName : EditText
     lateinit var flashcardNotes : EditText
+    lateinit var category : EditText
+    lateinit var selectedCategory : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_flashcard)
@@ -25,14 +32,20 @@ class AddFlashcard : AppCompatActivity() {
         flashcardDescription = findViewById(R.id.edit_flashcard_description)
         flashcardName= findViewById(R.id.edit_flashcard_name)
         flashcardNotes = findViewById(R.id.edit_flashcard_notes)
-       /* TODO: val categories = intent.getIntExtra("categories")
-         radioGroup.add(categories)
-        for(category in categories){
-            val rb = RadioButton(this)
-            rb.text = category
+        category = findViewById(R.id.category)
+        selectedCategory = ""
+        val categories = intent.getStringArrayExtra("categories")
+        //radioGroup.add(categories)
+
+        categories?.forEach { passedCategory ->
+            val rb = RadioButton(   this)
+            rb.text = passedCategory
             rb.id = View.generateViewId()
+            rb.layoutParams = ViewGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, 50f.toDips().toInt())
+            rb.gravity = Gravity.CENTER_HORIZONTAL
+            rb.textSize = 18f
             radioGroup.addView(rb)
-        }*/
+        }
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
             createFlashcard()
@@ -66,9 +79,9 @@ class AddFlashcard : AppCompatActivity() {
     private fun appendToVocabulary(){
         val myIntent = Intent()
         Log.println(Log.ERROR, "am", "Out")
-        myIntent.putExtra("native", flashcardDescription.text)
-        myIntent.putExtra("german", flashcardName.text)
-        myIntent.putExtra("category", findViewById<RadioButton>(radioGroup.checkedRadioButtonId).text)
+        myIntent.putExtra("native", flashcardDescription.text.toString())
+        myIntent.putExtra("german", flashcardName.text.toString())
+        myIntent.putExtra("category", selectedCategory)
         setResult(Activity.RESULT_OK, myIntent)
         finish()
     }
@@ -76,8 +89,17 @@ class AddFlashcard : AppCompatActivity() {
 
     private fun checkFilled() : Boolean {
         var errors = ""
-        if(radioGroup.checkedRadioButtonId  == -1){
-            errors += "Please, check appropriate category. "
+        if(category.text.toString() == "") {
+            if (radioGroup.checkedRadioButtonId == -1) {
+                errors += "Please, check appropriate category. "
+            }
+            else{
+                selectedCategory = findViewById<RadioButton>(radioGroup.checkedRadioButtonId).text.toString()
+            }
+        }
+        else{
+            selectedCategory = category.text.toString()
+            Log.println(Log.WARN, "zksfjg", "CATEGORY NOT EMPTY : $selectedCategory")
         }
         if(flashcardName.text.isEmpty()){
             errors += "Please, input flashcard name. "
@@ -96,4 +118,6 @@ class AddFlashcard : AppCompatActivity() {
             return false
         }
     }
+    fun Float.toDips() =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, resources.displayMetrics);
 }
