@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Database(entities = [WordEntity::class], version = 1, exportSchema = false)
-abstract class WordDatabase : RoomDatabase() {
+@TypeConverters(Converters::class)
+abstract class WordDatabase: RoomDatabase() {
+
 
     abstract fun userDao(): WordDao
 
