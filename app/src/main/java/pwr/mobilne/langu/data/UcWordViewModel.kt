@@ -10,12 +10,14 @@ import kotlinx.coroutines.launch
 public class WordViewModel(application: Application): AndroidViewModel(application) {
 
     val readAllData: LiveData<List<WordEntity>>
+    val getAllCategories: LiveData<List<String>>
     private val repository: WordRepository
 
     init {
         val userDao = WordDatabase.getDatabase(application).userDao()
         repository = WordRepository(userDao)
         readAllData = repository.readAllData
+        getAllCategories = repository.getAllCategories
     }
 
     fun addWord(task: WordEntity){
