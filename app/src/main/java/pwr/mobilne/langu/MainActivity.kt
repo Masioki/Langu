@@ -12,6 +12,7 @@ import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
 import androidx.lifecycle.Observer
+import pwr.mobilne.langu.activities.game.hangman.HangmanActivity
 import java.util.*
 
 
@@ -47,5 +48,9 @@ class MainActivity : AppCompatActivity() {
             int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
             startActivity(int)
         }
+
+        val int = Intent(this, HangmanActivity::class.java)
+        int.putExtra("word", WordEntity(1,"german", "opis opis", Locale.GERMAN, "kat"))
+        startActivity(int)
     }
 }

@@ -21,8 +21,9 @@ class HangmanInputFragment() : Fragment() {
     private lateinit var description: TextView
     private lateinit var word: WordEntity
     private lateinit var endLayout: LinearLayout
-    private val guessedLetters: MutableList<Char> = mutableListOf()
-    private val letterContainers: MutableList<View> = mutableListOf()
+    private var locked: Boolean = false
+    private var guessedLetters: MutableList<Char> = mutableListOf()
+    private var letterContainers: MutableList<View> = mutableListOf()
     private val letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()
 
     constructor(word: WordEntity) : this() {
@@ -46,19 +47,17 @@ class HangmanInputFragment() : Fragment() {
 
         if (savedInstanceState != null) {
             word = savedInstanceState.getSerializable("word") as WordEntity
+            letterContainers =
+                (savedInstanceState.getSerializable("containers") as Array<View>).toMutableList()
+            guessedLetters =
+                (savedInstanceState.getSerializable("guessed") as Array<Char>).toMutableList()
+            locked = savedInstanceState.getBoolean("locked")
         }
 
-        for (letter in letters) {
-            val key = layoutInflater.inflate(R.layout.hangman_input_key, keyboardLayout, false)
-            key.setOnClickListener {
-                play(letter)
-                key.setBackgroundResource(R.drawable.hangman_key_background_inactive)
-                // key.background = resources.getDrawable(R.drawable.hangman_key_background_inactive)
-            }
-            key.findViewById<TextView>(R.id.hangmanKey).text = letter.toString()
-            keyboardLayout.addView(key)
-        }
         reset()
+        update()
+        checkWin()
+        if (locked) displayDescription()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -66,10 +65,27 @@ class HangmanInputFragment() : Fragment() {
         outState.putSerializable("word", word)
         outState.putSerializable("containers", letterContainers.toTypedArray())
         outState.putSerializable("guessed", guessedLetters.toTypedArray())
+        outState.putBoolean("locked", locked)
     }
 
     fun reset() {
+        keyboardLayout.removeAllViews()
+        for (letter in letters) {
+            val key = layoutInflater.inflate(R.layout.hangman_input_key, keyboardLayout, false)
+            key.setOnClickListener {
+                play(letter)
+                key.setBackgroundResource(R.drawable.hangman_key_background_inactive)
+                key.elevation = 2F
+                // key.background = resources.getDrawable(R.drawable.hangman_key_background_inactive)
+            }
+            if (guessedLetters.contains(letter)) {
+                key.setBackgroundResource(R.drawable.hangman_key_background_inactive)
+            }
+            key.findViewById<TextView>(R.id.hangmanKey).text = letter.toString()
+            keyboardLayout.addView(key)
+        }
         lettersLayout.removeAllViews()
+        letterContainers.clear()
         for (i in 1..word.german.length) {
             val container =
                 layoutInflater.inflate(R.layout.hangman_input_letter, lettersLayout, false)
@@ -96,27 +112,48 @@ class HangmanInputFragment() : Fragment() {
         }
     }
 
+    private fun checkWin(): Boolean {
+        if (guessedLetters.containsAll(
+                word.german.toCharArray().toList().stream()
+                    .map { i -> i.uppercaseChar() }
+                    .collect(Collectors.toList()))
+        ) {
+            println("check win")
+            displayDescription()
+            (activity as HangmanActivity).win()
+            lock()
+            return true
+        }
+        return false
+    }
+
     private fun play(letter: Char) {
-        if (!guessedLetters.contains(letter)) {
+        if (!guessedLetters.contains(letter) && !locked) {
             guessedLetters.add(letter)
-            if (guessedLetters.containsAll(
-                    word.german.toCharArray().toList().stream()
-                        .map { i -> i.uppercaseChar() }
-                        .collect(Collectors.toList()))
-            ) {
-                endLayout.visibility = VISIBLE
-                endLayout.alpha = 0F
-                endLayout.animate()
-                    .setDuration(1500)
-                    .translationY(-endLayout.height.toFloat())
-                    .alpha(1.0F)
-                    .setListener(null);
-                (activity as HangmanActivity).win()
-            } else if (indexOf(letter) < 0) {
-                (activity as HangmanActivity).missed()
+            if (!checkWin()) {
+                if (indexOf(letter) < 0) {
+                    (activity as HangmanActivity).missed()
+                }
             }
             update()
         }
     }
 
+    fun playAgain() {
+
+    }
+
+    fun lock() {
+        locked = true
+    }
+
+    fun displayDescription() {
+        endLayout.visibility = VISIBLE
+        endLayout.alpha = 0F
+        endLayout.animate()
+            .setDuration(1500)
+            .translationY(-endLayout.height.toFloat() / 2.5F)
+            .alpha(1.0F)
+            .setListener(null);
+    }
 }
