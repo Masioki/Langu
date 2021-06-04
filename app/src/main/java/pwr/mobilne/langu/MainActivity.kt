@@ -16,6 +16,7 @@ import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
 import androidx.lifecycle.Observer
+import pwr.mobilne.langu.activities.game.hangman.HangmanActivity
 import java.util.*
 
 
@@ -84,18 +85,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
-        if(resultCode == 111) {
-            super.onActivityResult(requestCode, resultCode, intentData)
-            val category = intentData?.getStringExtra("category")
-            val german = intentData?.getStringExtra("german")
-            val native = intentData?.getStringExtra("native")
-            if(german != null && native != null && category != null) {
-                val word = WordEntity(0, german, native, Locale.GERMAN, category)
-                uvm.addWord(word)
-            }
-            Log.println(Log.ERROR, "words", uvm.readAllData.toString() + "zduhugggghj")
-        }
-        Log.println(Log.ERROR, "words", uvm.readAllData.toString() + "szdkhgfzk")
-    }*/
+    fun playHangman(view: View){
+        val intent = Intent(this, HangmanActivity::class.java)
+        val word = WordEntity(0, "Juni", "June", Locale.GERMAN, "calendar")
+        intent.putExtra("word", word)
+        startActivity(intent)
+    }
+
 }

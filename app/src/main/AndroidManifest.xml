@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Langu">
+        <activity android:name=".activities.game.hangman.HangmanActivity" />
         <activity android:name=".WordSearchActivity" />
-        <activity android:name=".AddFlashcard"></activity>
+        <activity android:name=".AddFlashcard"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

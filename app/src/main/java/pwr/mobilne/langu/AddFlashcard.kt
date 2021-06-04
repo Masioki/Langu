@@ -35,8 +35,6 @@ class AddFlashcard : AppCompatActivity() {
         category = findViewById(R.id.category)
         selectedCategory = ""
         val categories = intent.getStringArrayExtra("categories")
-        //radioGroup.add(categories)
-
         categories?.forEach { passedCategory ->
             val rb = RadioButton(   this)
             rb.text = passedCategory
@@ -50,25 +48,6 @@ class AddFlashcard : AppCompatActivity() {
         fab.setOnClickListener { view ->
             createFlashcard()
         }
-
-        /*radioGroup.setOnCheckedChangeListener { group, checkedId -> // find which radio button is selected
-            if (checkedId == R.id.radioNoun) {
-                Toast.makeText(
-                    applicationContext, "choice: Silent",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (checkedId == R.id.radioVerb) {
-                Toast.makeText(
-                    applicationContext, "choice: Sound",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (checkedId == R.id.radioOther) {
-                Toast.makeText(
-                    applicationContext, "choice: Vibration",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }*/
     }
 
     fun createFlashcard(){
@@ -85,7 +64,6 @@ class AddFlashcard : AppCompatActivity() {
         setResult(Activity.RESULT_OK, myIntent)
         finish()
     }
-
 
     private fun checkFilled() : Boolean {
         var errors = ""
