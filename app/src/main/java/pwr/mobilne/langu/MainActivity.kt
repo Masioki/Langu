@@ -12,6 +12,7 @@ import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
 import androidx.lifecycle.Observer
+import pwr.mobilne.langu.WordSearchActivity
 import java.util.*
 
 
@@ -42,10 +43,37 @@ class MainActivity : AppCompatActivity() {
          */
         uvm.addWord(WordEntity(0,"aa","12", Locale.GERMAN,"arh"))
 
-        binding.button.setOnClickListener{  // TODO pass String array to this activity with key "wordlist"
-            val int = Intent(this, WordSearchActivity::class.java)
-            int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
-            startActivity(int)
+        binding.button.setOnClickListener{
+            startWordsearch()
         }
+    }
+
+    private fun startWordsearch() {
+        // direction:
+        // 0: Eng on board, Deutsch displayed
+        // 1: Deutsch on board, Eng displayed
+        val translationDirection = 1
+
+        val words = wordsLista.toTypedArray()
+        words.shuffle()
+        val list = words.take(WordsearchConst.SIZE).toTypedArray()
+        val map = hashMapOf<String, String>()
+
+        when(translationDirection) {
+            0 -> {
+                for (word in list){
+                    map[word.nativs] = word.german
+                }
+            }
+            1 -> {
+                for (word in list){
+                    map[word.german] = word.nativs
+                }
+            }
+        }
+
+        val int = Intent(this, WordSearchActivity::class.java)
+        int.putExtra("translationMap", map)
+        startActivity(int)
     }
 }

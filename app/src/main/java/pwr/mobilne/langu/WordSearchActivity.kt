@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -17,8 +16,10 @@ import android.widget.RelativeLayout
 import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
 
+object WordsearchConst {
+    const val SIZE = 12 // board size
+}
 
-const val SIZE = 12 // board size
 
 class WordSearchActivity : AppCompatActivity() {
 
@@ -27,24 +28,34 @@ class WordSearchActivity : AppCompatActivity() {
     private lateinit var surfaceView: DrawingView
     private lateinit var tableLayout: TableLayout
     private lateinit var wordsTextView: TextView
+
+    private lateinit var translationMap: HashMap<String, String>
     private lateinit var wordList: Array<String>
     private lateinit var foundWords: MutableList<String>
     private lateinit var foundCoords: MutableList<IntArray>
     private lateinit var wordsPlaced: List<Int>
 
+    private var SIZE = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_search)
+        SIZE = WordsearchConst.SIZE
+
+        @Suppress("UNCHECKED_CAST")
+        translationMap =
+            (intent.getSerializableExtra("translationMap") as HashMap<String, String>?)!!
+        wordList = translationMap.keys.filter { it.length <= SIZE }.toTypedArray()
         wordsTextView = findViewById(R.id.word_list)
         buildGrid()
         foundWords = mutableListOf()
         foundCoords = mutableListOf()
-        wordList =
-            intent.getStringArrayListExtra("wordlist")!!.filter { it.length <= SIZE }.toTypedArray()
+//        wordList =
+//            intent.getStringArrayListExtra("wordlist")!!.filter { it.length <= SIZE }.toTypedArray()
         wordsPlaced = createWordSearch(wordList, SIZE) // get indices of successfully placed words
         addRandomLetters()
         printGrid()
-        printWords(wordList, wordsPlaced)
+        setWordListText()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -54,6 +65,7 @@ class WordSearchActivity : AppCompatActivity() {
         outState.putSerializable("foundWords", foundWords.toTypedArray())
         outState.putSerializable("foundCoords", foundCoords.toTypedArray())
         outState.putSerializable("wordsPlaced", wordsPlaced.toTypedArray())
+        outState.putSerializable("translationMap", translationMap)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -61,22 +73,31 @@ class WordSearchActivity : AppCompatActivity() {
 
         // get arrays from bundle and cast them properly
         var tmplist = savedInstanceState.getSerializable("lettersGrid") as Array<*>
-        lettersGrid = tmplist.filterIsInstance<Array<String?>>().takeIf { it.size == tmplist.size }!!.toTypedArray()
+        lettersGrid =
+            tmplist.filterIsInstance<Array<String?>>().takeIf { it.size == tmplist.size }!!
+                .toTypedArray()
 
         tmplist = savedInstanceState.getSerializable("detectionGrid") as Array<*>
-        detectionGrid = tmplist.filterIsInstance<Array<Int?>>().takeIf { it.size == tmplist.size }!!.toTypedArray()
+        detectionGrid = tmplist.filterIsInstance<Array<Int?>>().takeIf { it.size == tmplist.size }!!
+            .toTypedArray()
 
         tmplist = savedInstanceState.getSerializable("foundWords") as Array<*>
-        foundWords = tmplist.filterIsInstance<String>().takeIf { it.size == tmplist.size }!!.toMutableList()
+        foundWords =
+            tmplist.filterIsInstance<String>().takeIf { it.size == tmplist.size }!!.toMutableList()
 
         tmplist = savedInstanceState.getSerializable("wordsPlaced") as Array<*>
         wordsPlaced = tmplist.filterIsInstance<Int>().takeIf { it.size == tmplist.size }!!
 
         tmplist = savedInstanceState.getSerializable("foundCoords") as Array<*>
-        foundCoords = tmplist.filterIsInstance<IntArray>().takeIf { it.size == tmplist.size }!!.toMutableList()
+        foundCoords = tmplist.filterIsInstance<IntArray>().takeIf { it.size == tmplist.size }!!
+            .toMutableList()
+
+        @Suppress("UNCHECKED_CAST")  // dont know how to cast to hashmap :<
+        translationMap =
+            (savedInstanceState.getSerializable("translationMap") as HashMap<String, String>?)!!
 
         // restore colors
-        for(e in foundCoords) {
+        for (e in foundCoords) {
             markFoundWord(e[0], e[1], e[2], e[3])
         }
         printGrid()
@@ -134,7 +155,7 @@ class WordSearchActivity : AppCompatActivity() {
                     2
                 foundCoords.add(intArrayOf(startingPos[0], startingPos[1], word.length, direction))
                 markFoundWord(startingPos[0], startingPos[1], word.length, direction = direction)
-                println("You found word : $word!")
+                println("You found word : $word - ${translationMap[word]}!")
                 setWordListText()
                 if (wordList.size == foundWords.size) {
                     endDialog()
@@ -146,7 +167,7 @@ class WordSearchActivity : AppCompatActivity() {
     private fun endDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Spiel ist aus!")
-        val message = "Glückwunsch du hast gewonnen"
+        val message = "Glückwunsch, du hast gewonnen"
         builder.setMessage(message)
         builder.setPositiveButton("OK") { _, _ -> finish() }
         builder.show()
@@ -157,7 +178,7 @@ class WordSearchActivity : AppCompatActivity() {
         var numElems = 0
         for (w in wordsPlaced) {
             numElems++
-            val word = wordList[w]
+            val word = translationMap[wordList[w]]
             val str = SpannableString(word)
 
             val typedValue: TypedValue = TypedValue()
@@ -257,15 +278,6 @@ class WordSearchActivity : AppCompatActivity() {
                 textViewCell.text = lettersGrid[i][j]
             }
         }
-    }
-
-    private fun printWords(words: Array<String>, wordsPlaced: List<Int>) {
-        val bobTheBuilder = StringBuilder()
-        for (w in wordsPlaced) {
-            bobTheBuilder.append(words[w] + ", ")
-        }
-        bobTheBuilder.setLength(bobTheBuilder.length - 2)
-        wordsTextView.text = bobTheBuilder.toString()
     }
 
     private fun getTableLayoutCell(layout: TableLayout, rowNo: Int, columnNo: Int): View? {
