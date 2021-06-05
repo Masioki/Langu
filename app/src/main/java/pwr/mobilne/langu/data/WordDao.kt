@@ -1,12 +1,7 @@
 package pwr.mobilne.langu.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface WordDao {
@@ -24,5 +19,8 @@ interface WordDao {
 
     @Update
     suspend fun updateWord(word: WordEntity)
+
+    @Query("SELECT  * FROM words ORDER BY RANDOM() LIMIT 1")
+    fun getRandomWord(): WordEntity
 
 }

@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 
 @Database(entities = [WordEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
-abstract class WordDatabase: RoomDatabase() {
+abstract class WordDatabase : RoomDatabase() {
 
 
     abstract fun userDao(): WordDao
@@ -28,7 +28,8 @@ abstract class WordDatabase: RoomDatabase() {
                     context.applicationContext,
                     WordDatabase::class.java,
                     "user_database"
-                ).build()
+                )
+                    .allowMainThreadQueries().build()
                 INSTANCE = instance
                 return instance
             }

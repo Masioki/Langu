@@ -5,12 +5,13 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:layout_margin="3dp"
-        android:gravity="center_horizontal">
+        android:gravity="center_vertical">
 
     <TextView
             android:text=" "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:id="@+id/hangmanLetter"
             android:gravity="center_horizontal" />
 </LinearLayout>
