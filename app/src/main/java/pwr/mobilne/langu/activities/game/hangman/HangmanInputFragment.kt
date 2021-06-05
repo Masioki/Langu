@@ -68,7 +68,7 @@ class HangmanInputFragment() : Fragment() {
         outState.putBoolean("locked", locked)
     }
 
-    fun reset() {
+    private fun reset() {
         keyboardLayout.removeAllViews()
         for (letter in letters) {
             val key = layoutInflater.inflate(R.layout.hangman_input_key, keyboardLayout, false)

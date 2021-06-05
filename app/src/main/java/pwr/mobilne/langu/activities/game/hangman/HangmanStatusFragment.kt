@@ -43,12 +43,6 @@ class HangmanStatusFragment : Fragment() {
         image.setImageResource(id)
     }
 
-    fun reset() {
-        currentLives = maxLives
-        display()
-    }
-
-
     fun next() {
         currentLives = 0.coerceAtLeast(currentLives - 1)
         display()

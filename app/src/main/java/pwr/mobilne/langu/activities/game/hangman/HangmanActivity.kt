@@ -8,6 +8,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
 import pwr.mobilne.langu.R
+import pwr.mobilne.langu.data.WordDatabase
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.databinding.ActivityHangmanBinding
 
@@ -22,6 +23,9 @@ class HangmanActivity : AppCompatActivity() {
         binding = ActivityHangmanBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+
+
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             binding.hangmanLayout.orientation = LinearLayout.HORIZONTAL
             binding.hangmanInputContainer.layoutParams.width = 0
@@ -48,7 +52,8 @@ class HangmanActivity : AppCompatActivity() {
                 "input"
             ) as HangmanInputFragment
         } else {
-            word = intent.getSerializableExtra("word") as WordEntity
+            //word = intent.getSerializableExtra("word") as WordEntity
+            word = WordDatabase.getDatabase(this).userDao().getRandomWord()
             status = HangmanStatusFragment()
             input = HangmanInputFragment(word)
             supportFragmentManager.beginTransaction().add(R.id.hangmanStatusContainer, status)
@@ -66,8 +71,15 @@ class HangmanActivity : AppCompatActivity() {
     }
 
     fun start() {
-        input.reset()
-        status.reset()
+        supportFragmentManager.beginTransaction().remove(status).commit()
+        supportFragmentManager.beginTransaction().remove(input).commit()
+        word = WordDatabase.getDatabase(this).userDao().getRandomWord()
+        status = HangmanStatusFragment()
+        input = HangmanInputFragment(word)
+        supportFragmentManager.beginTransaction().add(R.id.hangmanStatusContainer, status)
+            .commit()
+        supportFragmentManager.beginTransaction().add(R.id.hangmanInputContainer, input)
+            .commit()
     }
 
     fun win() {
