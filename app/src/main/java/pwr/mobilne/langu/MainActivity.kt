@@ -32,8 +32,9 @@ class MainActivity : AppCompatActivity() {
             val category = intent?.getStringExtra("category")
             val german = intent?.getStringExtra("german")
             val native = intent?.getStringExtra("native")
+            val language = intent?.getSerializableExtra("language")
             if(german != null && native != null && category != null) {
-                val word = WordEntity(0, german, native, Locale.GERMAN, category)
+                val word = WordEntity(0, german, native, language as Locale, category)
                 uvm.addWord(word)
             }
         }

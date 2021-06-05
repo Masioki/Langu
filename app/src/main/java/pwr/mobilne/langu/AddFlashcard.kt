@@ -8,14 +8,10 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.updateLayoutParams
-import java.security.AccessController.getContext
+import java.util.*
 
 
 class AddFlashcard : AppCompatActivity() {
@@ -25,6 +21,7 @@ class AddFlashcard : AppCompatActivity() {
     lateinit var flashcardNotes : EditText
     lateinit var category : EditText
     lateinit var selectedCategory : String
+    lateinit var laguageSelected : Locale
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_flashcard)
@@ -48,6 +45,48 @@ class AddFlashcard : AppCompatActivity() {
         fab.setOnClickListener { view ->
             createFlashcard()
         }
+
+        /***
+         * spinner
+         */
+        val spinner: Spinner = findViewById(R.id.planets_spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.planets_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    0 -> laguageSelected = Locale.ENGLISH
+                    1 -> laguageSelected = Locale.FRENCH
+                    2 -> laguageSelected = Locale.CHINESE
+                    3 -> laguageSelected = Locale.ITALIAN
+                    4 -> laguageSelected = Locale.JAPANESE
+                    5 -> laguageSelected = Locale.KOREAN
+                    else -> { // Note the block
+                        laguageSelected = Locale.ENGLISH
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                laguageSelected = Locale.ENGLISH
+            }
+        }
+
+
     }
 
     fun createFlashcard(){
@@ -60,6 +99,7 @@ class AddFlashcard : AppCompatActivity() {
         Log.println(Log.ERROR, "am", "Out")
         myIntent.putExtra("native", flashcardDescription.text.toString())
         myIntent.putExtra("german", flashcardName.text.toString())
+        myIntent.putExtra("language", laguageSelected)
         myIntent.putExtra("category", selectedCategory)
         setResult(Activity.RESULT_OK, myIntent)
         finish()
