@@ -3,20 +3,18 @@ package pwr.mobilne.langu
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.ListAdapter
 import android.view.View
+import android.view.animation.TranslateAnimation
+import android.widget.Button
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.InvalidationTracker
-import org.jetbrains.annotations.Nullable
+import pwr.mobilne.langu.activities.game.hangman.HangmanActivity
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
-import androidx.lifecycle.Observer
-import pwr.mobilne.langu.activities.game.hangman.HangmanActivity
 import java.util.*
 
 
@@ -67,6 +65,16 @@ class MainActivity : AppCompatActivity() {
             int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
             startActivity(int)
         }
+        var btnAdd: Button? = findViewById(R.id.buttonAdd)
+        var btnSearch: Button? = findViewById(R.id.button)
+        var btnHangman: Button? = findViewById(R.id.buttonHangman)
+        var moveUp = TranslateAnimation(0F, 0F, 400F, 0F)
+        moveUp.setDuration(1000)
+        moveUp.setFillAfter(true)
+        btnAdd?.startAnimation(moveUp)
+        btnSearch?.startAnimation(moveUp)
+        btnHangman?.startAnimation(moveUp)
+
     }
 
     fun addFlashcard(view: View){

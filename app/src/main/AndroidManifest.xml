@@ -9,11 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Langu">
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".activities.game.hangman.HangmanActivity" />
         <activity android:name=".WordSearchActivity" />
-        <activity android:name=".AddFlashcard"/>
+        <activity android:name=".AddFlashcard" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

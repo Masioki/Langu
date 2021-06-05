@@ -11,53 +11,65 @@
         android:id="@+id/buttonAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add flashcard"
-        android:onClick="addFlashcard"
-        android:textColor="@color/theme_purple"
         android:backgroundTint="@color/theme_red_light"
+        android:onClick="addFlashcard"
+        android:text="Add flashcard2"
+        android:textColor="@color/theme_purple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.563" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/theme_red_light"
         android:text="WordSearch"
         android:textColor="@color/theme_purple"
-        android:backgroundTint="@color/theme_red_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonAdd"
-        app:layout_constraintVertical_bias="0.1" />
-
+        app:layout_constraintVertical_bias="0.232" />
 
     <Button
         android:id="@+id/buttonHangman"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hangman game"
-        android:onClick="playHangman"
         android:backgroundTint="@color/theme_red_light"
+        android:onClick="playHangman"
+        android:text="Hangman game"
         android:textColor="@color/theme_purple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.1"/>
+        app:layout_constraintVertical_bias="0.291" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/theme_purple"
         android:text="Welcome to Langu, choose fun activity for today"
+        android:textColor="@color/theme_purple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintVertical_bias="0.446" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="245dp"
+        android:layout_height="247dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.033"
+        app:srcCompat="@drawable/langu_logo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
