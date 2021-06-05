@@ -19,7 +19,7 @@ interface WordDao {
     @Query("SELECT * FROM words ORDER BY id ASC")
     fun readAllData(): LiveData<List<WordEntity>>
 
-    @Query( "SELECT category FROM words ORDER BY category ASC")
+    @Query( "SELECT DISTINCT category FROM words ORDER BY category ASC")
     fun getAllCategories(): LiveData<List<String>>
 
     @Update
