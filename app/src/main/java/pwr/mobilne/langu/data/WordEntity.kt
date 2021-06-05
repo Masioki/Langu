@@ -17,7 +17,7 @@ data class WordEntity(
     val nativs: String,
 
     @TypeConverters(Converters::class)
-    val laguage: Locale,
+    var laguage: Locale,
 
     var category: String
 ) : Serializable
