@@ -1,6 +1,9 @@
 package pwr.mobilne.langu.activities
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -11,13 +14,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import pwr.mobilne.langu.R
 import pwr.mobilne.langu.activities.game.hangman.HangmanActivity
 import pwr.mobilne.langu.activities.game.wordsearch.WordSearchActivity
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
+import pwr.mobilne.langu.reminders.NotificationScheduleWorker
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -82,7 +89,45 @@ class MainActivity : AppCompatActivity() {
         btnAdd?.startAnimation(moveUp)
         btnSearch?.startAnimation(moveUp)
         btnHangman?.startAnimation(moveUp)
+        setNotifications()
+    }
 
+    private fun setNotifications() {
+        createNotificationChannel()
+        for (i in 0..6) {
+            val date = GregorianCalendar()
+            date.set(Calendar.HOUR_OF_DAY, 16)
+            date.set(Calendar.MINUTE, 30)
+            date.set(Calendar.SECOND, 0)
+            date.set(Calendar.MILLISECOND, 0)
+            date.add(Calendar.DAY_OF_MONTH, i)
+
+            val tag = date.toString()
+            val now = Date()
+
+            WorkManager.getInstance(application).cancelAllWorkByTag(tag)
+            val delayInMinutes = (date.time.time - now.time) / 60000
+            val notificationWork =
+                OneTimeWorkRequest.Builder(NotificationScheduleWorker::class.java)
+                    .setInitialDelay(delayInMinutes, TimeUnit.MINUTES)
+                    .addTag(tag)
+                    .build()
+            WorkManager.getInstance(application).enqueue(notificationWork)
+        }
+    }
+
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            0.toString(),
+            "Langu notification",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "Langu notification"
+        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     fun addFlashcard(view: View) {
