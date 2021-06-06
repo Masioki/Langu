@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-public class WordViewModel(application: Application): AndroidViewModel(application) {
+class WordViewModel(application: Application): AndroidViewModel(application) {
 
     val readAllData: LiveData<List<WordEntity>>
     val getAllCategories: LiveData<List<String>>

@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import java.io.File
 
 @Database(entities = [WordEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
@@ -28,7 +30,17 @@ abstract class WordDatabase: RoomDatabase() {
                     context.applicationContext,
                     WordDatabase::class.java,
                     "user_database"
-                ).build()
+                ).addCallback(object : RoomDatabase.Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        //pre-populate data
+                        val statements: List<String> = DataGenerator.getWords().split("\n")
+                        for(sql in statements){
+                            db.execSQL(sql)
+                        }
+                    }
+                })
+                    .build()
                 INSTANCE = instance
                 return instance
             }
