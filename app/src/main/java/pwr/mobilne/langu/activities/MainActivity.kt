@@ -8,10 +8,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.TranslateAnimation
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequest
@@ -33,6 +38,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var wordsLista: MutableList<WordEntity>
     private lateinit var categories: MutableList<String>
     private lateinit var uvm: WordViewModel
+
+    companion object {
+        lateinit var appLanguage: String
+    }
 
     /**
      * onCreate - przy tworzeniu
@@ -59,21 +68,45 @@ class MainActivity : AppCompatActivity() {
         wordsLista =
             listOf(WordEntity(0, "a1a", "13", Locale.ENGLISH, "arh")) as MutableList<WordEntity>
 
+        appLanguage =
+            this.getPreferences(Context.MODE_PRIVATE).getString("langu_language", "fr").toString()
         val view = binding.root
         setContentView(view)
+
+
         /**
          * Selectowanie z bazy danych
          */
         uvm.readAllData.observe(this, Observer { status ->
             this.wordsLista = status as MutableList<WordEntity>
+            val langs = wordsLista.map { w -> w.laguage.toString() }.distinct()
+            val index = langs.indexOf(appLanguage)
+            val spinner =
+                (findViewById<Toolbar>(R.id.toolbar)).findViewById<Spinner>(R.id.toolbar_spinner)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, langs)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+            spinner.setSelection(index)
+//            spinner.onItemSelectedListener = AdapterView.OnItemSelectedListener{
+            spinner.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parentView: AdapterView<*>?,
+                    selectedItemView: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    setLanguage(langs[position])
+                }
+
+                override fun onNothingSelected(parentView: AdapterView<*>?) {
+                    setLanguage("de")
+                }
+            }
+            setSupportActionBar(findViewById(R.id.toolbar))
         })
         uvm.getAllCategories.observe(this, Observer { status ->
             this.categories = status as MutableList<String>
         })
-        /**
-         * PRZYKŁAD DODAWANIA DO BAZY DANYCH
-         */
-        uvm.addWord(WordEntity(0, "aaghg", "1hgh2", Locale.GERMAN, "arh"))
 
         binding.button.setOnClickListener {
             startWordsearch()
@@ -89,6 +122,15 @@ class MainActivity : AppCompatActivity() {
         btnSearch?.startAnimation(moveUp)
         btnHangman?.startAnimation(moveUp)
         setNotifications()
+    }
+
+    fun setLanguage(l: String) {
+        appLanguage = l
+        with(this.getPreferences(MODE_PRIVATE).edit()){
+            putString("langu_language", appLanguage)
+            apply()
+        }
+        //this.getPreferences(Context.MODE_PRIVATE).edit().putString("language", appLanguage).apply()
     }
 
     private fun setNotifications() {
@@ -128,6 +170,7 @@ class MainActivity : AppCompatActivity() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
     private fun startWordsearch() {
         // direction:
         // 0: nativs on board, Deutsch displayed
@@ -138,17 +181,20 @@ class MainActivity : AppCompatActivity() {
         val language = words[0].laguage
         // shuffle the list ant take a number of first elements
         words.shuffle()
-        val list = words.take(WordsearchConst.SIZE).toTypedArray()
+        val list = words
+            .filter { w -> w.laguage == Locale.forLanguageTag(appLanguage) }
+            .take(WordsearchConst.SIZE)
+            .toTypedArray()
         val map = hashMapOf<String, String>()
 
-        when(translationDirection) {
+        when (translationDirection) {
             0 -> {
-                for (word in list){
+                for (word in list) {
                     map[word.nativs.uppercase()] = word.german.uppercase()
                 }
             }
             1 -> {
-                for (word in list){
+                for (word in list) {
                     map[word.german.uppercase()] = word.nativs.uppercase()
                 }
             }

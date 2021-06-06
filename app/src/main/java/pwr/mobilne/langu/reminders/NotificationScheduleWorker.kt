@@ -5,6 +5,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import pwr.mobilne.langu.activities.MainActivity
 import pwr.mobilne.langu.data.WordDatabase
 import kotlin.random.Random
 
@@ -14,7 +15,7 @@ class NotificationScheduleWorker(
 ) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        val word = WordDatabase.getDatabase(context).userDao().getRandomWord()
+        val word = WordDatabase.getDatabase(context).userDao().getRandomWord(MainActivity.appLanguage)
         val text = "Your word for today is '" + word.german + "' which means '" + word.nativs + "'"
         val builder = NotificationCompat.Builder(context, 0.toString())
             .setSmallIcon(

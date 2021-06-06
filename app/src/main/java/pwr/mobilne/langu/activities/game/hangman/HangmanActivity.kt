@@ -8,6 +8,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
 import pwr.mobilne.langu.R
+import pwr.mobilne.langu.activities.MainActivity
 import pwr.mobilne.langu.data.WordDatabase
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.databinding.ActivityHangmanBinding
@@ -53,7 +54,7 @@ class HangmanActivity : AppCompatActivity() {
             ) as HangmanInputFragment
         } else {
             //word = intent.getSerializableExtra("word") as WordEntity
-            word = WordDatabase.getDatabase(this).userDao().getRandomWord()
+            word = WordDatabase.getDatabase(this).userDao().getRandomWord(MainActivity.appLanguage)
             status = HangmanStatusFragment()
             input = HangmanInputFragment(word)
             supportFragmentManager.beginTransaction().add(R.id.hangmanStatusContainer, status)
@@ -73,7 +74,7 @@ class HangmanActivity : AppCompatActivity() {
     fun start() {
         supportFragmentManager.beginTransaction().remove(status).commit()
         supportFragmentManager.beginTransaction().remove(input).commit()
-        word = WordDatabase.getDatabase(this).userDao().getRandomWord()
+        word = WordDatabase.getDatabase(this).userDao().getRandomWord(MainActivity.appLanguage)
         status = HangmanStatusFragment()
         input = HangmanInputFragment(word)
         supportFragmentManager.beginTransaction().add(R.id.hangmanStatusContainer, status)

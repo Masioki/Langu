@@ -20,7 +20,7 @@ interface WordDao {
     @Update
     suspend fun updateWord(word: WordEntity)
 
-    @Query("SELECT  * FROM words ORDER BY RANDOM() LIMIT 1")
-    fun getRandomWord(): WordEntity
+    @Query("SELECT  * FROM words WHERE laguage = :lang ORDER BY RANDOM() LIMIT 1")
+    fun getRandomWord(lang: String): WordEntity
 
 }

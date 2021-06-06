@@ -16,7 +16,10 @@
 <!--        <item name="android:windowBackground">?colorPrimary</item>-->
 <!--    </style>-->
 
-    <style name="Theme.Langu" parent="Theme.MaterialComponents.DayNight">
+    <style name="Theme.Langu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+<!--        <item name="windowActionBar">true</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+        <item name="colorButtonNormal">@color/theme_pink</item>
         <item name="colorPrimary">@color/theme_pink_light</item>
         <item name="colorPrimaryVariant">@color/theme_pink</item>
         <item name="colorOnPrimary">@color/theme_pink_light</item>
