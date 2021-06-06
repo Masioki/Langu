@@ -3,6 +3,18 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="try_again">Try again!</string>
+    <string name="input_new_category">Input new category</string>
+    <string name="or_check_from_existing">Or check from existing</string>
+    <string name="kitchen">Kitchen</string>
+    <string name="activity_verbs">Activity verbs</string>
+    <string name="jobs">Jobs</string>
+    <string name="german_word">German word</string>
+    <string name="word_in_your_language">Word in your language</string>
+    <string name="pick_your_language">Pick your language</string>
+    <string name="add_flashcard">Add flashcard</string>
+    <string name="wordsearch">WordSearch</string>
+    <string name="hangman_game">Hangman game</string>
+    <string name="welcome_to_langu_choose_fun_activity_for_today">Welcome to Langu, choose fun activity for today</string>
 
 
     <string-array name="planets_array">

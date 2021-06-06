@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.TranslateAnimation
-import android.widget.Button
+import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -20,25 +20,28 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var wordsLista:  MutableList<WordEntity>
-    private lateinit var categories:  MutableList<String>
+    private lateinit var wordsLista: MutableList<WordEntity>
+    private lateinit var categories: MutableList<String>
     private lateinit var uvm: WordViewModel
+
     /**
      * onCreate - przy tworzeniu
      */
-    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            val category = intent?.getStringExtra("category")
-            val german = intent?.getStringExtra("german")
-            val native = intent?.getStringExtra("native")
-            val language = intent?.getSerializableExtra("language")
-            if(german != null && native != null && category != null) {
-                val word = WordEntity(0, german, native, language as Locale, category)
-                uvm.addWord(word)
+    val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                val category = intent?.getStringExtra("category")
+                val german = intent?.getStringExtra("german")
+                val native = intent?.getStringExtra("native")
+                val language = intent?.getSerializableExtra("language")
+                if (german != null && native != null && category != null) {
+                    val word = WordEntity(0, german, native, language as Locale, category)
+                    uvm.addWord(word)
+                }
             }
         }
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -68,9 +71,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(int)
         }
 
-        var btnAdd: Button? = findViewById(R.id.buttonAdd)
-        var btnSearch: Button? = findViewById(R.id.button)
-        var btnHangman: Button? = findViewById(R.id.buttonHangman)
+        var btnAdd: TextView? = findViewById(R.id.buttonAdd)
+        var btnSearch: TextView? = findViewById(R.id.button)
+        var btnHangman: TextView? = findViewById(R.id.buttonHangman)
         var moveUp = TranslateAnimation(0F, 0F, 400F, 0F)
         moveUp.setDuration(1000)
         moveUp.setFillAfter(true)
@@ -80,14 +83,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun addFlashcard(view: View){
+    fun addFlashcard(view: View) {
         val intent = Intent(this, AddFlashcard::class.java).apply {
         }
         uvm.getAllCategories.observe(this, Observer { status ->
             this.categories = status as MutableList<String>
         })
-        var catArray : Array<String?> = arrayOfNulls(this.categories.size)
-        for (i in 0 until this.categories.size){
+        var catArray: Array<String?> = arrayOfNulls(this.categories.size)
+        for (i in 0 until this.categories.size) {
             catArray[i] = this.categories[i]
         }
         intent.putExtra("categories", catArray)
@@ -96,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun playHangman(view: View){
+    fun playHangman(view: View) {
         val intent = Intent(this, HangmanActivity::class.java)
         val word = WordEntity(0, "Juni", "June", Locale.GERMAN, "calendar")
         intent.putExtra("word", word)
