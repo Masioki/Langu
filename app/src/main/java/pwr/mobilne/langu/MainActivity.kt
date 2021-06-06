@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         uvm = ViewModelProvider(this).get(WordViewModel::class.java)
-        wordsLista = listOf(WordEntity(0,"a1a","13", Locale.ENGLISH,"arh")) as MutableList<WordEntity>
+        wordsLista =
+            listOf(WordEntity(0, "a1a", "13", Locale.ENGLISH, "arh")) as MutableList<WordEntity>
 
         val view = binding.root
         setContentView(view)
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
          * Selectowanie z bazy danych
          */
         uvm.readAllData.observe(this, Observer { status ->
-            this.wordsLista= status as MutableList<WordEntity>
+            this.wordsLista = status as MutableList<WordEntity>
         })
         uvm.getAllCategories.observe(this, Observer { status ->
             this.categories = status as MutableList<String>
@@ -59,13 +60,14 @@ class MainActivity : AppCompatActivity() {
         /**
          * PRZYKŁAD DODAWANIA DO BAZY DANYCH
          */
-        uvm.addWord(WordEntity(0,"aa","12", Locale.GERMAN,"arh"))
+        uvm.addWord(WordEntity(0, "aaghg", "1hgh2", Locale.GERMAN, "arh"))
 
-        binding.button.setOnClickListener{  // TODO pass String array to this activity with key "wordlist"
+        binding.button.setOnClickListener {  // TODO pass String array to this activity with key "wordlist"
             val int = Intent(this, WordSearchActivity::class.java)
             int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
             startActivity(int)
         }
+
         var btnAdd: Button? = findViewById(R.id.buttonAdd)
         var btnSearch: Button? = findViewById(R.id.button)
         var btnHangman: Button? = findViewById(R.id.buttonHangman)
