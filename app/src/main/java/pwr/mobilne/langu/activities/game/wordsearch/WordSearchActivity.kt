@@ -1,4 +1,4 @@
-package pwr.mobilne.langu
+package pwr.mobilne.langu.activities.game.wordsearch
 
 import android.app.AlertDialog
 import android.content.res.Configuration
@@ -15,6 +15,9 @@ import android.widget.*
 import android.widget.RelativeLayout
 import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
+import pwr.mobilne.langu.R
+import java.util.*
+import kotlin.collections.HashMap
 
 object WordsearchConst {
     const val SIZE = 12 // board size
@@ -35,26 +38,27 @@ class WordSearchActivity : AppCompatActivity() {
     private lateinit var foundCoords: MutableList<IntArray>
     private lateinit var wordsPlaced: List<Int>
 
-    private var SIZE = 0
+    private val SIZE = WordsearchConst.SIZE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_search)
-        SIZE = WordsearchConst.SIZE
 
         @Suppress("UNCHECKED_CAST")
         translationMap =
             (intent.getSerializableExtra("translationMap") as HashMap<String, String>?)!!
         wordList = translationMap.keys.filter { it.length <= SIZE }.toTypedArray()
-        wordsTextView = findViewById(R.id.word_list)
+
         buildGrid()
+
         foundWords = mutableListOf()
         foundCoords = mutableListOf()
-//        wordList =
-//            intent.getStringArrayListExtra("wordlist")!!.filter { it.length <= SIZE }.toTypedArray()
+
         wordsPlaced = createWordSearch(wordList, SIZE) // get indices of successfully placed words
         addRandomLetters()
         printGrid()
+
+        wordsTextView = findViewById(R.id.word_list)
         setWordListText()
     }
 
@@ -92,7 +96,7 @@ class WordSearchActivity : AppCompatActivity() {
         foundCoords = tmplist.filterIsInstance<IntArray>().takeIf { it.size == tmplist.size }!!
             .toMutableList()
 
-        @Suppress("UNCHECKED_CAST")  // dont know how to cast to hashmap :<
+        @Suppress("UNCHECKED_CAST")  // dont know how to cast to hashmap the same way :<
         translationMap =
             (savedInstanceState.getSerializable("translationMap") as HashMap<String, String>?)!!
 
@@ -167,7 +171,7 @@ class WordSearchActivity : AppCompatActivity() {
     private fun endDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Spiel ist aus!")
-        val message = "Glückwunsch, du hast gewonnen"
+        val message = "Glückwunsch, du hast gewonnen!"
         builder.setMessage(message)
         builder.setPositiveButton("OK") { _, _ -> finish() }
         builder.show()
@@ -185,7 +189,7 @@ class WordSearchActivity : AppCompatActivity() {
             theme.resolveAttribute(R.attr.colorHighlight, typedValue, true)
 
 
-            val color = if (foundWords.contains(word))
+            val color = if (foundWords.contains(wordList[w]))
                 typedValue.data
             else
                 Color.rgb(255, 255, 255)
@@ -288,11 +292,22 @@ class WordSearchActivity : AppCompatActivity() {
     }
 
     private fun addRandomLetters() {
+        val lang = intent.getSerializableExtra("language") as Locale
+        var s = ""
+        val set = com.ibm.icu.util.LocaleData.getExemplarSet(
+            com.ibm.icu.util.ULocale.forLocale(lang),
+            com.ibm.icu.util.LocaleData.ES_STANDARD
+        )
+        for (i in set) {
+            s += i.toString().uppercase()
+        }
+        val charset = s.toCharArray()
+
         for (i in 0 until SIZE) {
             for (j in 0 until SIZE) {
                 if (lettersGrid[i][j] == null) {
                     lettersGrid[i][j] =
-                        ('A'..'Z').random().toString() // TODO replace with german charset
+                        charset.random().toString()
                 }
             }
         }

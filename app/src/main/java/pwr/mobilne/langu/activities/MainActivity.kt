@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import pwr.mobilne.langu.R
 import pwr.mobilne.langu.activities.game.hangman.HangmanActivity
 import pwr.mobilne.langu.activities.game.wordsearch.WordSearchActivity
+import pwr.mobilne.langu.activities.game.wordsearch.WordsearchConst
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
@@ -67,22 +68,51 @@ class MainActivity : AppCompatActivity() {
          */
         uvm.addWord(WordEntity(0, "aaghg", "1hgh2", Locale.GERMAN, "arh"))
 
-        binding.button.setOnClickListener {  // TODO pass String array to this activity with key "wordlist"
-            val int = Intent(this, WordSearchActivity::class.java)
-            int.putExtra("wordlist", arrayListOf("KOCHAM", "APKI", "MOBILNE", "WERI", "MACZ"))
-            startActivity(int)
+        binding.button.setOnClickListener {
+            startWordsearch()
         }
 
-        var btnAdd: TextView? = findViewById(R.id.buttonAdd)
-        var btnSearch: TextView? = findViewById(R.id.button)
-        var btnHangman: TextView? = findViewById(R.id.buttonHangman)
-        var moveUp = TranslateAnimation(0F, 0F, 400F, 0F)
+        val btnAdd: TextView? = findViewById(R.id.buttonAdd)
+        val btnSearch: TextView? = findViewById(R.id.button)
+        val btnHangman: TextView? = findViewById(R.id.buttonHangman)
+        val moveUp = TranslateAnimation(0F, 0F, 400F, 0F)
         moveUp.setDuration(1000)
         moveUp.setFillAfter(true)
         btnAdd?.startAnimation(moveUp)
         btnSearch?.startAnimation(moveUp)
         btnHangman?.startAnimation(moveUp)
 
+    }
+    private fun startWordsearch() {
+        // direction:
+        // 0: nativs on board, Deutsch displayed
+        // 1: Deutsch on board, nativs displayed
+        val translationDirection = (0..1).random()
+
+        val words = wordsLista.toTypedArray()
+        val language = words[0].laguage
+        // shuffle the list ant take a number of first elements
+        words.shuffle()
+        val list = words.take(WordsearchConst.SIZE).toTypedArray()
+        val map = hashMapOf<String, String>()
+
+        when(translationDirection) {
+            0 -> {
+                for (word in list){
+                    map[word.nativs] = word.german
+                }
+            }
+            1 -> {
+                for (word in list){
+                    map[word.german] = word.nativs
+                }
+            }
+        }
+
+        val int = Intent(this, WordSearchActivity::class.java)
+        int.putExtra("translationMap", map)
+        int.putExtra("language", language)
+        startActivity(int)
     }
 
     fun addFlashcard(view: View) {

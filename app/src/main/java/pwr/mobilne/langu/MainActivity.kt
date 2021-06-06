@@ -2,17 +2,14 @@ package pwr.mobilne.langu
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.ListAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.InvalidationTracker
-import org.jetbrains.annotations.Nullable
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding
 import androidx.lifecycle.Observer
-import pwr.mobilne.langu.WordSearchActivity
+import pwr.mobilne.langu.activities.game.wordsearch.WordSearchActivity
+import pwr.mobilne.langu.activities.game.wordsearch.WordsearchConst
 import java.util.*
 
 
