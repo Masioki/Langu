@@ -144,12 +144,12 @@ class MainActivity : AppCompatActivity() {
         when(translationDirection) {
             0 -> {
                 for (word in list){
-                    map[word.nativs] = word.german
+                    map[word.nativs.uppercase()] = word.german.uppercase()
                 }
             }
             1 -> {
                 for (word in list){
-                    map[word.german] = word.nativs
+                    map[word.german.uppercase()] = word.nativs.uppercase()
                 }
             }
         }

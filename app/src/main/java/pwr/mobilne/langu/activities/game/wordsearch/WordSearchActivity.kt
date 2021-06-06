@@ -109,7 +109,7 @@ class WordSearchActivity : AppCompatActivity() {
     }
 
 
-    private fun inViewInBounds(view: View, x: Int, y: Int): Boolean {
+    private fun checkIfCoordsWithin(view: View, x: Int, y: Int): Boolean {
         val outRect = Rect()
         val location = IntArray(2)
 
@@ -129,13 +129,13 @@ class WordSearchActivity : AppCompatActivity() {
         outer@ for (row in 0 until SIZE) {
             for (col in 0 until SIZE) {
                 val textViewCell = getTableLayoutCell(tableLayout, row, col) as TextView
-                if (inViewInBounds(textViewCell, xStart, yStart)) {
+                if (checkIfCoordsWithin(textViewCell, xStart, yStart)) {
                     start = textViewCell
                     startIndex = detectionGrid[row][col]
                     startingPos[0] = row
                     startingPos[1] = col
                 }
-                if (inViewInBounds(textViewCell, xEnd, yEnd)) {
+                if (checkIfCoordsWithin(textViewCell, xEnd, yEnd)) {
                     end = textViewCell
                     endIndex = detectionGrid[row][col]
                     endingPos[0] = row
