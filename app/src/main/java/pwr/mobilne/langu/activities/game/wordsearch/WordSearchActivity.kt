@@ -1,11 +1,10 @@
-package pwr.mobilne.langu
+package pwr.mobilne.langu.activities.game.wordsearch
 
 import android.app.AlertDialog
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -16,6 +15,7 @@ import android.widget.*
 import android.widget.RelativeLayout
 import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
+import pwr.mobilne.langu.R
 
 
 const val SIZE = 12 // board size
@@ -61,22 +61,27 @@ class WordSearchActivity : AppCompatActivity() {
 
         // get arrays from bundle and cast them properly
         var tmplist = savedInstanceState.getSerializable("lettersGrid") as Array<*>
-        lettersGrid = tmplist.filterIsInstance<Array<String?>>().takeIf { it.size == tmplist.size }!!.toTypedArray()
+        lettersGrid =
+            tmplist.filterIsInstance<Array<String?>>().takeIf { it.size == tmplist.size }!!
+                .toTypedArray()
 
         tmplist = savedInstanceState.getSerializable("detectionGrid") as Array<*>
-        detectionGrid = tmplist.filterIsInstance<Array<Int?>>().takeIf { it.size == tmplist.size }!!.toTypedArray()
+        detectionGrid = tmplist.filterIsInstance<Array<Int?>>().takeIf { it.size == tmplist.size }!!
+            .toTypedArray()
 
         tmplist = savedInstanceState.getSerializable("foundWords") as Array<*>
-        foundWords = tmplist.filterIsInstance<String>().takeIf { it.size == tmplist.size }!!.toMutableList()
+        foundWords =
+            tmplist.filterIsInstance<String>().takeIf { it.size == tmplist.size }!!.toMutableList()
 
         tmplist = savedInstanceState.getSerializable("wordsPlaced") as Array<*>
         wordsPlaced = tmplist.filterIsInstance<Int>().takeIf { it.size == tmplist.size }!!
 
         tmplist = savedInstanceState.getSerializable("foundCoords") as Array<*>
-        foundCoords = tmplist.filterIsInstance<IntArray>().takeIf { it.size == tmplist.size }!!.toMutableList()
+        foundCoords = tmplist.filterIsInstance<IntArray>().takeIf { it.size == tmplist.size }!!
+            .toMutableList()
 
         // restore colors
-        for(e in foundCoords) {
+        for (e in foundCoords) {
             markFoundWord(e[0], e[1], e[2], e[3])
         }
         printGrid()

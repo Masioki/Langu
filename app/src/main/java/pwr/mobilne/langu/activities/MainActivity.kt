@@ -1,4 +1,4 @@
-package pwr.mobilne.langu
+package pwr.mobilne.langu.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -11,7 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import pwr.mobilne.langu.R
 import pwr.mobilne.langu.activities.game.hangman.HangmanActivity
+import pwr.mobilne.langu.activities.game.wordsearch.WordSearchActivity
 import pwr.mobilne.langu.data.WordEntity
 import pwr.mobilne.langu.data.WordViewModel
 import pwr.mobilne.langu.databinding.ActivityMainBinding

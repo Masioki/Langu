@@ -1,4 +1,4 @@
-package pwr.mobilne.langu
+package pwr.mobilne.langu.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
+import pwr.mobilne.langu.R
 import java.util.*
 
 
@@ -25,6 +26,10 @@ class AddFlashcard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_flashcard)
+//        findViewById<FloatingActionButton>(R.id.fab).hide()
+//        findViewById<FloatingActionButton>(R.id.fab).show()
+//        findViewById<FloatingActionButton>(R.id.fab).setImageResource(R.drawable.save_icon)
+
         radioGroup = findViewById<View>(R.id.radioGroup) as RadioGroup
         flashcardDescription = findViewById(R.id.edit_flashcard_description)
         flashcardName= findViewById(R.id.edit_flashcard_name)

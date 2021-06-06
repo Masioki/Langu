@@ -9,12 +9,12 @@
         android:roundIcon="@drawable/langu_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Langu">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.game.hangman.HangmanActivity" />
-        <activity android:name=".WordSearchActivity" />
-        <activity android:name=".AddFlashcard" />
+        <activity android:name=".activities.game.wordsearch.WordSearchActivity" />
+        <activity android:name=".activities.AddFlashcard" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.game.hangman.HangmanActivity"/>
     </application>
 
 </manifest>

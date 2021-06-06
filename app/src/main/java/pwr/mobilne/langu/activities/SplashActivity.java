@@ -1,15 +1,16 @@
-package pwr.mobilne.langu;
-
-import androidx.appcompat.app.AppCompatActivity;
+package pwr.mobilne.langu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import pwr.mobilne.langu.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -25,25 +26,23 @@ public class SplashActivity extends AppCompatActivity {
         logo.startAnimation(moveUp);
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(SplashActivity.this,MainActivity.class));
-                finish();
-            }
-        },4000);
+        handler.postDelayed(() -> {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
+        }, 4000);
 
         ProgressBar mProgressBar;
         CountDownTimer mCountDownTimer;
 
-        mProgressBar=findViewById(R.id.progressbar);
+        mProgressBar = findViewById(R.id.progressbar);
         mProgressBar.setProgress(0);
-        mCountDownTimer=new CountDownTimer(4000,1000) {
-            int i=0;
+        mCountDownTimer = new CountDownTimer(4000, 1000) {
+            int i = 0;
+
             @Override
             public void onTick(long millisUntilFinished) {
                 i++;
-                mProgressBar.setProgress(i*100/3);
+                mProgressBar.setProgress(i * 100 / 3);
             }
 
             @Override

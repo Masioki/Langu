@@ -1,4 +1,4 @@
-package pwr.mobilne.langu
+package pwr.mobilne.langu.activities.game.wordsearch
 
 import android.content.Context
 import android.graphics.*
@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import pwr.mobilne.langu.R
 
 class DrawingView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     // absolute screen coords
