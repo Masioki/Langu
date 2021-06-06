@@ -40,6 +40,7 @@ abstract class WordDatabase: RoomDatabase() {
                         }
                     }
                 })
+                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 return instance
