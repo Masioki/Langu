@@ -24,10 +24,19 @@ class HangmanInputFragment() : Fragment() {
     private var locked: Boolean = false
     private var guessedLetters: MutableList<Char> = mutableListOf()
     private var letterContainers: MutableList<View> = mutableListOf()
-    private val letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()
+    private lateinit var letters: CharArray
 
     constructor(word: WordEntity) : this() {
         this.word = word
+        var s = ""
+        val set = com.ibm.icu.util.LocaleData.getExemplarSet(
+            com.ibm.icu.util.ULocale.forLocale(word.laguage),
+            com.ibm.icu.util.LocaleData.ES_STANDARD
+        )
+        for (i in set) {
+            s += i.toString().uppercase()
+        }
+        letters = s.toCharArray()
     }
 
     override fun onCreateView(
@@ -52,6 +61,7 @@ class HangmanInputFragment() : Fragment() {
             guessedLetters =
                 (savedInstanceState.getSerializable("guessed") as Array<Char>).toMutableList()
             locked = savedInstanceState.getBoolean("locked")
+            letters = savedInstanceState.getSerializable("letters") as CharArray
         }
 
         reset()
@@ -66,6 +76,7 @@ class HangmanInputFragment() : Fragment() {
         outState.putSerializable("containers", letterContainers.toTypedArray())
         outState.putSerializable("guessed", guessedLetters.toTypedArray())
         outState.putBoolean("locked", locked)
+        outState.putSerializable("letters", letters)
     }
 
     private fun reset() {
